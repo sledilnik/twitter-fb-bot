@@ -1,4 +1,4 @@
-const { TwitterApi } = require('twitter-api-v2');
+const { TwitterApi } = require("twitter-api-v2");
 
 const {
   TWITTER_API_KEY,

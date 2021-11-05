@@ -2,13 +2,13 @@ const {
   CARDS_QUERY_PARAMS,
   MULTICARDS_QUERY_PARAMS,
   CHARTS_QUERY_PARAMS,
-} = require('./queryParams');
+} = require("./queryParams");
 
 function getLambdaParams(params) {
   return {
-    FunctionName: 'sledilnikScreenshot',
-    InvocationType: 'RequestResponse',
-    LogType: 'Tail',
+    FunctionName: "sledilnikScreenshot",
+    InvocationType: "RequestResponse",
+    LogType: "Tail",
     Payload: JSON.stringify({ queryStringParameters: params }),
   };
 }

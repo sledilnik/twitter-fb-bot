@@ -1,33 +1,30 @@
-const { v1Client } = require('./twitterClient');
+const { v1Client } = require("./twitterClient");
 
-const { DEFAULT } = require('./lambdaParams');
-const getScreenshot = require('./getScreenshot');
+const { DEFAULT } = require("./lambdaParams");
+const getScreenshot = require("./getScreenshot");
 
 const DELETE_DELAY = 1000;
 
+// eslint-disable-next-line no-unused-vars
 const getLastTweet = async () => {
   const homeTimeline = await v1Client.homeTimeline();
   return homeTimeline.tweets[0];
 };
 
-const deleteTweet = async (id_str = '') => {
-  if (!id_str) throw new Error('Missing arg "id_str');
+const deleteTweet = async (id_str = "") => {
+  if (!id_str) throw new Error('Missing arg "id_str"');
 
-  try {
-    console.log('Deleting tweet with id_str: ', id_str);
-    const tweet = await v1Client.deleteTweet(id_str);
-    return tweet;
-  } catch (error) {
-    throw error;
-  }
+  console.log("Deleting tweet with id_str: ", id_str);
+  const tweet = await v1Client.deleteTweet(id_str);
+  return tweet;
 };
 
-const deletingTweet = async tweet => {
+const deletingTweet = async (tweet) => {
   console.log(
     `After ${DELETE_DELAY}ms tweet with id_str: ${tweet.id_str} should be deleted!`
   );
 
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
         await deleteTweet(tweet.id_str);
@@ -39,10 +36,10 @@ const deletingTweet = async tweet => {
   });
 };
 
-const getResult = async tweet => {
-  const isDev = process.env.NODE_ENV === 'development';
-  console.log('Development mode: ', isDev);
-  let message = 'Success!';
+const getResult = async (tweet) => {
+  const isDev = process.env.NODE_ENV === "development";
+  console.log("Development mode: ", isDev);
+  let message = "Success!";
   if (isDev) {
     try {
       message = await deletingTweet(tweet);
@@ -56,8 +53,8 @@ const getResult = async tweet => {
 };
 
 // tweet with default image
-exports.tweetDefault = async (tweetText = 'Tweet with default image!') => {
-  console.log('tweetDefault');
+exports.tweetDefault = async (tweetText = "Tweet with default image!") => {
+  console.log("tweetDefault");
   try {
     const image = await getScreenshot(DEFAULT);
     if (image instanceof Error) {
@@ -65,8 +62,8 @@ exports.tweetDefault = async (tweetText = 'Tweet with default image!') => {
     }
 
     const body = image?.payload?.body;
-    const mediaId = await v1Client.uploadMedia(Buffer.from(body, 'base64'), {
-      type: 'png',
+    const mediaId = await v1Client.uploadMedia(Buffer.from(body, "base64"), {
+      type: "png",
     });
 
     const tweet = await v1Client.tweet(tweetText, {
@@ -80,16 +77,13 @@ exports.tweetDefault = async (tweetText = 'Tweet with default image!') => {
   }
 };
 
-exports.tweetSingle = async (
-  awsImageParams = {},
-  tweetText = 'Tweet with multiple images!'
-) => {
-  console.log('tweetSingle');
+exports.tweetSingle = async (awsImageParams = {}, tweetText = "") => {
+  console.log("tweetSingle");
   const Payload = JSON.parse(awsImageParams.Payload);
   const { type, screen } = Payload;
-  tweetText = !!tweetText
+  tweetText = tweetText
     ? tweetText
-    : `Tweet with type: ${card}, screen: ${screen}`;
+    : `Tweet with type: ${type}, screen: ${screen}`;
 
   const image = await getScreenshot(awsImageParams);
   if (image instanceof Error) {
@@ -98,8 +92,8 @@ exports.tweetSingle = async (
 
   try {
     const body = image?.payload?.body;
-    const mediaId = await v1Client.uploadMedia(Buffer.from(body, 'base64'), {
-      type: 'png',
+    const mediaId = await v1Client.uploadMedia(Buffer.from(body, "base64"), {
+      type: "png",
     });
 
     const tweet = await v1Client.tweet(tweetText, {
@@ -113,26 +107,26 @@ exports.tweetSingle = async (
   }
 };
 
-exports.tweetMultiple = async (awsImagesParams = [{}], tweetText = '') => {
-  console.log('tweetMultiple');
+exports.tweetMultiple = async (awsImagesParams = [{}], tweetText = "") => {
+  console.log("tweetMultiple");
   const images = await Promise.allSettled([
-    ...awsImagesParams.map(payload => getScreenshot(payload)),
+    ...awsImagesParams.map((payload) => getScreenshot(payload)),
   ]);
 
-  const onlyErrors = images.filter(image => image instanceof Error);
-  for (error of onlyErrors) {
-    console.warn('Could some/all images!');
+  const onlyErrors = images.filter((image) => image instanceof Error);
+  for (const error of onlyErrors) {
+    console.warn("Could some/all images!");
     console.log(error.message);
   }
-  const onlyValid = images.filter(image => !(image instanceof Error));
+  const onlyValid = images.filter((image) => !(image instanceof Error));
 
-  const imagesBase64 = onlyValid.map(result => result.value?.payload?.body);
+  const imagesBase64 = onlyValid.map((result) => result.value?.payload?.body);
 
   try {
     const media_ids = await Promise.all([
-      ...imagesBase64.map(image =>
-        v1Client.uploadMedia(Buffer.from(image, 'base64'), {
-          type: 'png',
+      ...imagesBase64.map((image) =>
+        v1Client.uploadMedia(Buffer.from(image, "base64"), {
+          type: "png",
         })
       ),
     ]);

@@ -1,9 +1,9 @@
 // 'https://github.com/PLhery/node-twitter-api-v2/blob/e2341e483494855221a77a56ea959f0841b34673/doc/examples.md#post-a-new-tweet-with-multiple-images'
 
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
-const { handler } = require('.');
+const { handler } = require(".");
 
 function run(...args) {
   const event = { queryStringParameters: { screens: null } };
@@ -26,4 +26,4 @@ function run(...args) {
   (async () => await handler(event, null, callback))();
 }
 
-run('testsToday', 'HOS', 'ALL');
+run("testsToday", "HOS", "ALL");

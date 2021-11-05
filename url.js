@@ -1,7 +1,7 @@
-const { CARD_SCREENS, MULTICARD_SCREENS, CHART_SCREENS } = require('./screens');
+const { CARD_SCREENS, MULTICARD_SCREENS, CHART_SCREENS } = require("./screens");
 
 const AWS_URL =
-  'https://325sfff4r2.execute-api.eu-central-1.amazonaws.com/sledilnikScreenshot';
+  "https://325sfff4r2.execute-api.eu-central-1.amazonaws.com/sledilnikScreenshot";
 
 const CARD_URL = `${AWS_URL}?type=card`;
 const MULTICARD_URL = `${AWS_URL}?type=multicard`;
