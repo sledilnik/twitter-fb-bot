@@ -11,20 +11,33 @@ exports.handler = async (event, _, callback) => {
   const isString = typeof screens === 'string';
   const isArray = Array.isArray(screens);
 
+  let result;
   try {
     if (!hasScreens) {
-      await tweetDefault(callback);
+      console.log('No query param "screens"! Go for tweetDefault()!');
+      result = await tweetDefault();
     }
 
-    if (isString) {
+    if (hasScreens && isString) {
+      console.log(`Query param screens: ${screens}! Go for tweetSingle()!`);
       const payload = SCREENS_PAYLOAD[screens];
-      await tweetSingle(payload, callback);
+      result = await tweetSingle(payload);
     }
 
-    if (isArray) {
+    if (hasScreens && isArray) {
+      console.log(
+        `Query param screens: ${screens
+          .join(', ')
+          .trimEnd()}! Go for tweetMultiple()!`
+      );
       const payloads = screens.map(screen => SCREENS_PAYLOAD[screen]);
-      await tweetMultiple(payloads, callback);
+      result = await tweetMultiple(payloads);
     }
+
+    if (!result) throw new Error('No result!');
+    if (result instanceof Error) throw result;
+
+    return callback(null, result);
   } catch (error) {
     console.log(error, error.stack);
     return callback(error);

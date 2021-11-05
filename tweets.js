@@ -3,8 +3,6 @@ const { v1Client } = require('./twitterClient');
 const { DEFAULT } = require('./lambdaParams');
 const getScreenshot = require('./getScreenshot');
 
-const isDev = process.env.NODE_ENV === 'development';
-
 const DELETE_DELAY = 1000;
 
 const getLastTweet = async () => {
@@ -12,42 +10,60 @@ const getLastTweet = async () => {
   return homeTimeline.tweets[0];
 };
 
-const deleteTweet = async (id_str = '', callback = () => {}) => {
-  if (!id_str || !callback) throw new Error('No id or callback');
+const deleteTweet = async (id_str = '') => {
+  if (!id_str) throw new Error('Missing arg "id_str');
 
   try {
-    console.log('Deleting tweet with id: ', id_str);
-    const { id } = await v1Client.deleteTweet(id_str);
-    return callback(null, `Deleted: ${id}`);
+    console.log('Deleting tweet with id_str: ', id_str);
+    const tweet = await v1Client.deleteTweet(id_str);
+    return tweet;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
 
-const deletingTweet = async (tweet, callback) => {
-  const lastTweet = await getLastTweet();
+const deletingTweet = async tweet => {
   console.log(
-    'Last tweet: ',
-    lastTweet.id,
-    lastTweet.full_text,
-    lastTweet.entities.media
+    `After ${DELETE_DELAY}ms tweet with id_str: ${tweet.id_str} should be deleted!`
   );
-  console.log('Our tweet: ', tweet.id, tweet.full_text, tweet.entities.media);
-  setTimeout(deleteTweet.bind(null, tweet.id_str, callback), DELETE_DELAY);
+
+  return new Promise(async (resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        await deleteTweet(tweet.id_str);
+        resolve(`Tweet with id_str: ${tweet.id_str} was deleted!`);
+      } catch (error) {
+        reject(error);
+      }
+    }, DELETE_DELAY);
+  });
+};
+
+const getResult = async tweet => {
+  const isDev = process.env.NODE_ENV === 'development';
+  console.log('Development mode: ', isDev);
+  let message = 'Success!';
+  if (isDev) {
+    try {
+      message = await deletingTweet(tweet);
+      return { message, tweet };
+    } catch (error) {
+      return { message: error.message, error };
+    }
+  }
+
+  return { message, tweet };
 };
 
 // tweet with default image
-exports.tweetDefault = async (
-  callback = () => {},
-  tweetText = 'This is test!'
-) => {
-  const image = await getScreenshot(DEFAULT);
-  if (image instanceof Error) {
-    return callback(image);
-  }
-
+exports.tweetDefault = async (tweetText = 'Tweet with default image!') => {
+  console.log('tweetDefault');
   try {
+    const image = await getScreenshot(DEFAULT);
+    if (image instanceof Error) {
+      throw image;
+    }
+
     const body = image?.payload?.body;
     const mediaId = await v1Client.uploadMedia(Buffer.from(body, 'base64'), {
       type: 'png',
@@ -57,26 +73,27 @@ exports.tweetDefault = async (
       media_ids: mediaId,
     });
 
-    isDev && (await deletingTweet(tweet, callback));
-
-    if (!isDev)
-      return callback(
-        null,
-        `Successfully posted default tweet! Tweet ID: ${id}`
-      );
+    const result = await getResult(tweet);
+    return result;
   } catch (error) {
-    return callback(error);
+    return { message: error.message, error };
   }
 };
 
 exports.tweetSingle = async (
-  payload = {},
-  callback = () => {},
-  tweetText = 'This is test!'
+  awsImageParams = {},
+  tweetText = 'Tweet with multiple images!'
 ) => {
-  const image = await getScreenshot(payload);
+  console.log('tweetSingle');
+  const Payload = JSON.parse(awsImageParams.Payload);
+  const { type, screen } = Payload;
+  tweetText = !!tweetText
+    ? tweetText
+    : `Tweet with type: ${card}, screen: ${screen}`;
+
+  const image = await getScreenshot(awsImageParams);
   if (image instanceof Error) {
-    return callback(image);
+    throw image;
   }
 
   try {
@@ -89,29 +106,22 @@ exports.tweetSingle = async (
       media_ids: mediaId,
     });
 
-    isDev && (await deletingTweet(tweet, callback));
-
-    if (!isDev)
-      return callback(
-        null,
-        `Successfully posted default tweet! Tweet ID: ${id}`
-      );
+    const result = await getResult(tweet);
+    return result;
   } catch (error) {
-    return callback(error);
+    return { message: error.message, error };
   }
 };
 
-exports.tweetMultiple = async (
-  payloads = [{}],
-  callback = () => {},
-  tweetText = 'This is test!'
-) => {
+exports.tweetMultiple = async (awsImagesParams = [{}], tweetText = '') => {
+  console.log('tweetMultiple');
   const images = await Promise.allSettled([
-    ...payloads.map(payload => getScreenshot(payload)),
+    ...awsImagesParams.map(payload => getScreenshot(payload)),
   ]);
 
   const onlyErrors = images.filter(image => image instanceof Error);
   for (error of onlyErrors) {
+    console.warn('Could some/all images!');
     console.log(error.message);
   }
   const onlyValid = images.filter(image => !(image instanceof Error));
@@ -120,25 +130,20 @@ exports.tweetMultiple = async (
 
   try {
     const media_ids = await Promise.all([
-      ...imagesBase64.map(image => {
-        return v1Client.uploadMedia(Buffer.from(image, 'base64'), {
+      ...imagesBase64.map(image =>
+        v1Client.uploadMedia(Buffer.from(image, 'base64'), {
           type: 'png',
-        });
-      }),
+        })
+      ),
     ]);
 
     const tweet = await v1Client.tweet(tweetText, {
       media_ids,
     });
 
-    isDev && (await deletingTweet(tweet, callback));
-
-    if (!isDev)
-      return callback(
-        null,
-        `Successfully posted default tweet! Tweet ID: ${id}`
-      );
+    const result = await getResult(tweet);
+    return result;
   } catch (error) {
-    return callback(error);
+    return { message: error.message, error };
   }
 };

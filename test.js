@@ -6,8 +6,7 @@ dotenv.config();
 const { handler } = require('.');
 
 function run(...args) {
-  const event = { queryStringParameters: { screens: '' } };
-  console.log(event);
+  const event = { queryStringParameters: { screens: null } };
 
   if (args.length === 1) {
     event.queryStringParameters.screens = args[0];
@@ -17,12 +16,14 @@ function run(...args) {
     event.queryStringParameters.screens = args;
   }
 
+  console.log({ event });
+
   const callback = (error, result) => {
     if (error) console.log(error, error.stack);
-    if (result) console.log('Success!', result);
+    if (result) console.log(result);
   };
 
   (async () => await handler(event, null, callback))();
 }
 
-run('DailyComparison');
+run('testsToday', 'HOS', 'ALL');
