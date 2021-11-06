@@ -5,25 +5,18 @@ dotenv.config();
 
 const { handler } = require(".");
 
-function run(...args) {
-  const event = { queryStringParameters: { screens: null } };
-
-  if (args.length === 1) {
-    event.queryStringParameters.screens = args[0];
-  }
-
-  if (args.length > 1) {
-    event.queryStringParameters.screens = args;
-  }
+function run(post, social) {
+  const event = { queryStringParameters: { post, social } };
 
   console.log({ event });
 
   const callback = (error, result) => {
     if (error) console.log(error, error.stack);
     if (result) console.log(result);
+    return [error, result];
   };
 
   (async () => await handler(event, null, callback))();
 }
 
-run("testsToday", "HOS", "ALL");
+run("lab", "tw");

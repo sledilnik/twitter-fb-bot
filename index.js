@@ -1,38 +1,48 @@
-const { tweetDefault, tweetSingle, tweetMultiple } = require("./tweets");
+const { tweetMultiple } = require("./tweets");
+const { POST_SCREENS } = require("./posts");
 const { CARDS, MULTICARDS, CHARTS } = require("./screenshotParams");
+const getScreenshot = require("./getScreenshot");
 
 const SCREENS_PAYLOAD = { ...CARDS, ...MULTICARDS, ...CHARTS };
 
+const SUPPORTED_SOCIAL = ["tw"];
+const SUPPORTED_POST = ["lab", "hos"];
+
 exports.handler = async (event, _, callback) => {
   const { queryStringParameters } = event;
-  const screens = queryStringParameters?.screens;
+  const post = queryStringParameters?.post;
+  const social = queryStringParameters?.social;
 
-  const hasScreens = !!screens;
-  const isString = typeof screens === "string";
-  const isArray = Array.isArray(screens);
+  if (!post) throw new Error('You must provide post! ["lab" || "hos"]');
+  if (!social) throw new Error('You must provide social! ["tw"]');
+
+  if (!SUPPORTED_POST.includes(post.toLowerCase()))
+    throw new Error(`Post ${post} is not supported!`);
+
+  if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
+    throw new Error(`Social "${social}" is not supported!`);
 
   let result;
   try {
-    if (!hasScreens) {
-      console.log('No query param "screens"! Go for tweetDefault()!');
-      result = await tweetDefault();
-    }
+    const postParam = {
+      FunctionName: "GrabSledilnikSocialPost",
+      InvocationType: "RequestResponse",
+      LogType: "Tail",
+      Payload: JSON.stringify({
+        queryStringParameters: { post, social },
+      }),
+    };
+    const postResponse = await getScreenshot(postParam);
+    if (postResponse.status !== 200)
+      throw new Error(`Something went wrong during grabing tweet text!`);
 
-    if (hasScreens && isString) {
-      console.log(`Query param screens: ${screens}! Go for tweetSingle()!`);
-      const payload = SCREENS_PAYLOAD[screens];
-      result = await tweetSingle(payload);
-    }
+    const tweetText = postResponse?.payload ?? "";
+    if (!tweetText) console.warn("Tweet without text");
 
-    if (hasScreens && isArray) {
-      console.log(
-        `Query param screens: ${screens
-          .join(", ")
-          .trimEnd()}! Go for tweetMultiple()!`
-      );
-      const payloads = screens.map((screen) => SCREENS_PAYLOAD[screen]);
-      result = await tweetMultiple(payloads);
-    }
+    const { screens } = POST_SCREENS[post.toUpperCase()];
+    const payloads = screens.map((screen) => SCREENS_PAYLOAD[screen]);
+
+    result = await tweetMultiple(payloads, tweetText);
 
     if (!result) throw new Error("No result!");
     if (result instanceof Error) throw result;
