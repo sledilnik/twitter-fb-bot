@@ -1,3 +1,5 @@
+// tweet api allows only 4 media
+
 exports.POST_SCREENS = {
   LAB: {
     screens: [
@@ -8,13 +10,6 @@ exports.POST_SCREENS = {
     ],
   },
   HOS: {
-    screens: [
-      "casesAvg7Days",
-      "casesActive100k",
-      "vaccinationSummary",
-      "hospitalizedCurrent",
-      "icuCurrent",
-      "deceasedToDate",
-    ],
+    screens: ["casesAvg7Days", "casesActive100k", "vaccinationSummary", "HOS"],
   },
 };

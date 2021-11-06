@@ -22,6 +22,11 @@ exports.handler = async (event, _, callback) => {
   if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
     throw new Error(`Social "${social}" is not supported!`);
 
+  const { screens } = POST_SCREENS[post.toUpperCase()];
+
+  if (screens.length > 4)
+    throw new Error("Twitter doesn't allow more than 4 images!");
+
   let result;
   try {
     const postParam = {
@@ -39,7 +44,6 @@ exports.handler = async (event, _, callback) => {
     const tweetText = postResponse?.payload ?? "";
     if (!tweetText) console.warn("Tweet without text");
 
-    const { screens } = POST_SCREENS[post.toUpperCase()];
     const payloads = screens.map((screen) => SCREENS_PAYLOAD[screen]);
 
     result = await tweetMultiple(payloads, tweetText);
