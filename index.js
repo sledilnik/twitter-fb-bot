@@ -55,37 +55,35 @@ exports.handler = async (event, _, callback) => {
 
     if (goForThread) {
       const splittedText = tweetText.split("\n");
-      const lastRow = splittedText.slice(-1);
-      const first = splittedText.slice(0, 5).concat(lastRow).join("\n");
-      const second = splittedText.slice(5, 8).concat(lastRow).join("\n");
-      const third = splittedText.slice(8, 9).concat(lastRow).join("\n");
-      const fourth = splittedText.slice(9, 12).concat(lastRow).join("\n");
+      const emojis = splittedText.slice(-1);
+      const lab = splittedText.slice(0, 5).concat(emojis).join("\n");
+      const vacs = splittedText.slice(5, 8).concat(emojis).join("\n");
+      const byAge = splittedText.slice(8, 9).concat(emojis).join("\n");
+      const hos = splittedText.slice(9, 12).concat(emojis).join("\n");
       const _fifth = splittedText.slice(12, splittedText.length - 1);
 
       const HOSPITALS = "Stanje po bolnišnicah";
       const MUNICIPALITIES = "Po krajih";
 
-      const hosIndex = _fifth.findIndex((element) =>
+      const byHosIndex = _fifth.findIndex((element) =>
         element.includes(HOSPITALS)
       );
-      const munIndex = _fifth.findIndex((element) =>
+      const byMunIndex = _fifth.findIndex((element) =>
         element.includes(MUNICIPALITIES)
       );
 
-      const fifth = _fifth.slice(hosIndex, 4).concat(lastRow).join("\n");
-      const sixth = _fifth
-        .slice(munIndex, munIndex + 4)
-        .concat(lastRow)
+      const byHos = _fifth.slice(byHosIndex, 4).concat(emojis).join("\n");
+      const byMun = _fifth
+        .slice(byMunIndex, byMunIndex + 4)
+        .concat(emojis)
         .join("\n");
 
       const payloads = screens.map((threadScreens) =>
         threadScreens.map((screen) => SCREENS_PAYLOAD[screen])
       );
-      const thread = [first, second, third, fourth, fifth, sixth].map(
-        (item) => ({
-          status: item,
-        })
-      );
+      const thread = [lab, vacs, byAge, hos, byHos, byMun].map((item) => ({
+        status: item,
+      }));
 
       result = await tweetThread(payloads, thread);
     }
