@@ -44,11 +44,12 @@ exports.handler = async (event, _, callback) => {
     const tweetText = postResponse?.payload ?? "";
     if (!tweetText) console.warn("Tweet without text");
 
-    const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(tweetText);
-
-    const goForThread = displayRangeEnd > validRangeEnd;
+    const goForThread = post === "epi";
 
     if (!goForThread) {
+      const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(tweetText);
+      displayRangeEnd > validRangeEnd && console.warn("Text will be truncated");
+
       const payloads = screens.map((screen) => SCREENS_PAYLOAD[screen]);
       result = await tweetMultiple(payloads, tweetText);
     }
