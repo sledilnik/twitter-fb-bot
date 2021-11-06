@@ -1,5 +1,5 @@
 const { tweetDefault, tweetSingle, tweetMultiple } = require("./tweets");
-const { CARDS, MULTICARDS, CHARTS } = require("./lambdaParams");
+const { CARDS, MULTICARDS, CHARTS } = require("./screenshotParams");
 
 const SCREENS_PAYLOAD = { ...CARDS, ...MULTICARDS, ...CHARTS };
 

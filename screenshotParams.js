@@ -4,7 +4,7 @@ const {
   CHARTS_QUERY_PARAMS,
 } = require("./queryParams");
 
-function getLambdaParams(params) {
+function getScrenshotParams(params) {
   return {
     FunctionName: "sledilnikScreenshot",
     InvocationType: "RequestResponse",
@@ -15,7 +15,7 @@ function getLambdaParams(params) {
 
 const CARDS = Object.entries(CARDS_QUERY_PARAMS).reduce(
   (acc, [screen, params]) => {
-    acc[screen] = getLambdaParams(params);
+    acc[screen] = getScrenshotParams(params);
     return acc;
   },
   {}
@@ -23,7 +23,7 @@ const CARDS = Object.entries(CARDS_QUERY_PARAMS).reduce(
 
 const MULTICARDS = Object.entries(MULTICARDS_QUERY_PARAMS).reduce(
   (acc, [screen, params]) => {
-    acc[screen] = getLambdaParams(params);
+    acc[screen] = getScrenshotParams(params);
     return acc;
   },
   {}
@@ -31,7 +31,7 @@ const MULTICARDS = Object.entries(MULTICARDS_QUERY_PARAMS).reduce(
 
 const CHARTS = Object.entries(CHARTS_QUERY_PARAMS).reduce(
   (acc, [screen, params]) => {
-    acc[screen] = getLambdaParams(params);
+    acc[screen] = getScrenshotParams(params);
     return acc;
   },
   {}

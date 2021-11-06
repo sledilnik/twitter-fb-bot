@@ -1,6 +1,6 @@
 const { v1Client } = require("./twitterClient");
 
-const { DEFAULT } = require("./lambdaParams");
+const { DEFAULT } = require("./screenshotParams");
 const getScreenshot = require("./getScreenshot");
 
 const DELETE_DELAY = 1000;
