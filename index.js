@@ -1,3 +1,4 @@
+const { ApiResponseError } = require("twitter-api-v2");
 const { tweetMultiple } = require("./tweets");
 const { POST_SCREENS } = require("./postsDict");
 const { CARDS, MULTICARDS, CHARTS } = require("./screenshotParams");
@@ -53,7 +54,18 @@ exports.handler = async (event, _, callback) => {
 
     return callback(null, result);
   } catch (error) {
-    console.log(error, error.stack);
+    if (
+      error instanceof ApiResponseError &&
+      error.rateLimitError &&
+      error.rateLimit
+    ) {
+      console.log(
+        `You just hit the rate limit! Limit for this endpoint is ${error.rateLimit.limit} requests!`
+      );
+      console.log(
+        `Request counter will reset at timestamp ${error.rateLimit.reset}.`
+      );
+    }
     return callback(error);
   }
 };
