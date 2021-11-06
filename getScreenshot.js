@@ -1,9 +1,9 @@
-let AWS = require('aws-sdk');
-const lambda = new AWS.Lambda({ region: 'eu-central-1' });
+let AWS = require("aws-sdk");
+const lambda = new AWS.Lambda({ region: "eu-central-1" });
 
 function getScreenshot(params) {
   return new Promise((resolve, reject) => {
-    lambda.invoke(params, async (error, data) => {
+    lambda.invoke(params, (error, data) => {
       const { FunctionName } = params;
       console.log(`Invoking AWS Lambda: ${FunctionName}.`);
       if (error) {
