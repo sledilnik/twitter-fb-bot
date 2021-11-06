@@ -1,7 +1,7 @@
 const { v1Client } = require("./twitterClient");
 
 const { DEFAULT } = require("./screenshotParams");
-const getScreenshot = require("./getScreenshot");
+const invokeAwsLambda = require("./invokeAwsLambda");
 
 const DELETE_DELAY = 1000;
 
@@ -56,7 +56,7 @@ const getResult = async (tweet) => {
 exports.tweetDefault = async (tweetText = "Tweet with default image!") => {
   console.log("tweetDefault");
   try {
-    const image = await getScreenshot(DEFAULT);
+    const image = await invokeAwsLambda(DEFAULT);
     if (image instanceof Error) {
       throw image;
     }
@@ -85,7 +85,7 @@ exports.tweetSingle = async (awsImageParams = {}, tweetText = "") => {
     ? tweetText
     : `Tweet with type: ${type}, screen: ${screen}`;
 
-  const image = await getScreenshot(awsImageParams);
+  const image = await invokeAwsLambda(awsImageParams);
   if (image instanceof Error) {
     throw image;
   }
@@ -110,7 +110,7 @@ exports.tweetSingle = async (awsImageParams = {}, tweetText = "") => {
 exports.tweetMultiple = async (awsImagesParams = [{}], tweetText = "") => {
   console.log("tweetMultiple");
   const images = await Promise.allSettled([
-    ...awsImagesParams.map((payload) => getScreenshot(payload)),
+    ...awsImagesParams.map((payload) => invokeAwsLambda(payload)),
   ]);
 
   const onlyErrors = images.filter((image) => image instanceof Error);

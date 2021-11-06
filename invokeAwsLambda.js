@@ -1,7 +1,7 @@
 let AWS = require("aws-sdk");
 const lambda = new AWS.Lambda({ region: "eu-central-1" });
 
-function getScreenshot(params) {
+function invokeAwsLambda(params) {
   return new Promise((resolve, reject) => {
     lambda.invoke(params, (error, data) => {
       const { FunctionName } = params;
@@ -24,4 +24,4 @@ function getScreenshot(params) {
   });
 }
 
-module.exports = getScreenshot;
+module.exports = invokeAwsLambda;

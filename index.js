@@ -1,7 +1,7 @@
 const { tweetMultiple } = require("./tweets");
 const { POST_SCREENS } = require("./posts");
 const { CARDS, MULTICARDS, CHARTS } = require("./screenshotParams");
-const getScreenshot = require("./getScreenshot");
+const invokeAwsLambda = require("./invokeAwsLambda");
 
 const SCREENS_PAYLOAD = { ...CARDS, ...MULTICARDS, ...CHARTS };
 
@@ -32,7 +32,7 @@ exports.handler = async (event, _, callback) => {
         queryStringParameters: { post, social },
       }),
     };
-    const postResponse = await getScreenshot(postParam);
+    const postResponse = await invokeAwsLambda(postParam);
     if (postResponse.status !== 200)
       throw new Error(`Something went wrong during grabing tweet text!`);
 
