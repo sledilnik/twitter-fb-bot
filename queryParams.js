@@ -1,4 +1,8 @@
-const { CARD_SCREENS, MULTICARD_SCREENS, CHART_SCREENS } = require("./screens");
+const {
+  CARD_SCREENS,
+  MULTICARD_SCREENS,
+  CHART_SCREENS,
+} = require("./screensDict");
 
 const defaultQueryParams = {
   type: "",

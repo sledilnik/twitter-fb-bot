@@ -1,5 +1,5 @@
 const { tweetMultiple } = require("./tweets");
-const { POST_SCREENS } = require("./posts");
+const { POST_SCREENS } = require("./postsDict");
 const { CARDS, MULTICARDS, CHARTS } = require("./screenshotParams");
 const invokeAwsLambda = require("./invokeAwsLambda");
 
