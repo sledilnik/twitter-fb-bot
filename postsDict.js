@@ -17,4 +17,14 @@ exports.POST_SCREENS = {
       "deceasedToDate",
     ],
   },
+  EPI: {
+    screens: [
+      ["DailyComparison"],
+      ["Tests", "Vaccination"],
+      ["AgeGroups"],
+      ["Patients"],
+      ["IcuPatients"],
+      ["Regions"],
+    ],
+  },
 };

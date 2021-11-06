@@ -1,5 +1,6 @@
 const { ApiResponseError } = require("twitter-api-v2");
-const { tweetMultiple } = require("./tweets");
+const twitter = require("twitter-text");
+const { tweetMultiple, tweetThread } = require("./tweets");
 const { POST_SCREENS } = require("./postsDict");
 const { CARDS, MULTICARDS, CHARTS } = require("./screenshotParams");
 const invokeAwsLambda = require("./invokeAwsLambda");
@@ -7,7 +8,7 @@ const invokeAwsLambda = require("./invokeAwsLambda");
 const SCREENS_PAYLOAD = { ...CARDS, ...MULTICARDS, ...CHARTS };
 
 const SUPPORTED_SOCIAL = ["tw"];
-const SUPPORTED_POST = ["lab", "hos"];
+const SUPPORTED_POST = ["lab", "hos", "epi"];
 
 exports.handler = async (event, _, callback) => {
   const { queryStringParameters } = event;
@@ -25,9 +26,6 @@ exports.handler = async (event, _, callback) => {
 
   const { screens } = POST_SCREENS[post.toUpperCase()];
 
-  if (screens.length > 4)
-    throw new Error("Twitter doesn't allow more than 4 images!");
-
   let result;
   try {
     const postParam = {
@@ -38,6 +36,7 @@ exports.handler = async (event, _, callback) => {
         queryStringParameters: { post, social },
       }),
     };
+
     const postResponse = await invokeAwsLambda(postParam);
     if (postResponse.status !== 200)
       throw new Error(`Something went wrong during grabing tweet text!`);
@@ -45,9 +44,51 @@ exports.handler = async (event, _, callback) => {
     const tweetText = postResponse?.payload ?? "";
     if (!tweetText) console.warn("Tweet without text");
 
-    const payloads = screens.map((screen) => SCREENS_PAYLOAD[screen]);
+    const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(tweetText);
 
-    result = await tweetMultiple(payloads, tweetText);
+    const goForThread = displayRangeEnd > validRangeEnd;
+
+    if (!goForThread) {
+      const payloads = screens.map((screen) => SCREENS_PAYLOAD[screen]);
+      result = await tweetMultiple(payloads, tweetText);
+    }
+
+    if (goForThread) {
+      const splittedText = tweetText.split("\n");
+      const lastRow = splittedText.slice(-1);
+      const first = splittedText.slice(0, 5).concat(lastRow).join("\n");
+      const second = splittedText.slice(5, 8).concat(lastRow).join("\n");
+      const third = splittedText.slice(8, 9).concat(lastRow).join("\n");
+      const fourth = splittedText.slice(9, 12).concat(lastRow).join("\n");
+      const _fifth = splittedText.slice(12, splittedText.length - 1);
+
+      const HOSPITALS = "Stanje po bolnišnicah";
+      const MUNICIPALITIES = "Po krajih";
+
+      const hosIndex = _fifth.findIndex((element) =>
+        element.includes(HOSPITALS)
+      );
+      const munIndex = _fifth.findIndex((element) =>
+        element.includes(MUNICIPALITIES)
+      );
+
+      const fifth = _fifth.slice(hosIndex, 4).concat(lastRow).join("\n");
+      const sixth = _fifth
+        .slice(munIndex, munIndex + 4)
+        .concat(lastRow)
+        .join("\n");
+
+      const payloads = screens.map((threadScreens) =>
+        threadScreens.map((screen) => SCREENS_PAYLOAD[screen])
+      );
+      const thread = [first, second, third, fourth, fifth, sixth].map(
+        (item) => ({
+          status: item,
+        })
+      );
+
+      result = await tweetThread(payloads, thread);
+    }
 
     if (!result) throw new Error("No result!");
     if (result instanceof Error) throw result;
