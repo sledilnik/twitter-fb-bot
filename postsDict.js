@@ -10,6 +10,11 @@ exports.POST_SCREENS = {
     ],
   },
   HOS: {
-    screens: ["casesAvg7Days", "casesActive100k", "vaccinationSummary", "HOS"],
+    screens: [
+      "vaccinationSummary",
+      "hospitalizedCurrent",
+      "icuCurrent",
+      "deceasedToDate",
+    ],
   },
 };
