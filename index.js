@@ -2,10 +2,20 @@ const { ApiResponseError } = require("twitter-api-v2");
 const twitter = require("twitter-text");
 const { tweetMultiple, tweetThread } = require("./tweets");
 const { POST_SCREENS } = require("./postsDict");
-const { CARDS, MULTICARDS, CHARTS } = require("./screenshotParams");
+const {
+  CARDS,
+  MULTICARDS,
+  CHARTS,
+  CUSTOM_CHARTS,
+} = require("./screenshotParams");
 const invokeAwsLambda = require("./invokeAwsLambda");
 
-const SCREENS_PAYLOAD = { ...CARDS, ...MULTICARDS, ...CHARTS };
+const SCREENS_PAYLOAD = {
+  ...CARDS,
+  ...MULTICARDS,
+  ...CHARTS,
+  ...CUSTOM_CHARTS,
+};
 
 const SUPPORTED_SOCIAL = ["tw"];
 const SUPPORTED_POST = ["lab", "hos", "epi"];
