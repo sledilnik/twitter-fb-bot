@@ -5,7 +5,10 @@ function invokeAwsLambda(params) {
   return new Promise((resolve, reject) => {
     lambda.invoke(params, (error, data) => {
       const { FunctionName } = params;
-      console.log(`Invoking AWS Lambda: ${FunctionName}.`);
+      console.log(
+        `Invoking AWS Lambda: ${FunctionName}.Payload: `,
+        params.Payload
+      );
       if (error) {
         console.log(error, error.stack);
         reject(error);
