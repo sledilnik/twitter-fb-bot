@@ -3,6 +3,7 @@ const {
   MULTICARD_SCREENS,
   CHART_SCREENS,
   CUSTOM_CHART_SCREENS,
+  CARD_EMBED_SCREENS,
 } = require("./screensDict");
 
 const AWS_URL =
@@ -11,6 +12,7 @@ const AWS_URL =
 const CARD_URL = `${AWS_URL}?type=card`;
 const MULTICARD_URL = `${AWS_URL}?type=multicard`;
 const CHART_URL = `${AWS_URL}?type=chart`;
+const CARD_EMBED_URL = `${AWS_URL}?type=card_embed`;
 
 exports.CARDS_URL = CARD_SCREENS.reduce((acc, screen) => {
   acc[screen] = `${CARD_URL}&screen=${screen}`;
@@ -30,6 +32,14 @@ exports.CHART_URL = CHART_SCREENS.reduce((acc, screen) => {
 exports.CUSTOM_CHARTS_URL = Object.entries(CUSTOM_CHART_SCREENS).reduce(
   (acc, [key, { screen, custom }]) => {
     acc[key] = `${CHART_URL}&screen=${screen}&custom=${custom}`;
+    return acc;
+  },
+  {}
+);
+
+exports.CARDS_EMBED_URL = Object.entries(CARD_EMBED_SCREENS).reduce(
+  (acc, [key, { screen }]) => {
+    acc[key] = `${CARD_EMBED_URL}&screen=${screen}`;
     return acc;
   },
   {}
