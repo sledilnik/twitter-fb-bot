@@ -40,7 +40,7 @@ exports.CUSTOM_CHARTS_QUERY_PARAMS = Object.entries(
 
 exports.CARDS_EMBED_QUERY_PARAMS = Object.entries(CARD_EMBED_SCREENS).reduce(
   (acc, [key, { screen, custom }]) => {
-    const cardDefault = { ...defaultQueryParams, type: "chart" };
+    const cardDefault = { ...defaultQueryParams, type: "card_embed" };
     acc[key] = { ...cardDefault, screen, custom };
     return acc;
   },
