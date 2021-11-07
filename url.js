@@ -27,9 +27,10 @@ exports.CHART_URL = CHART_SCREENS.reduce((acc, screen) => {
   return acc;
 }, {});
 
-exports.CUSTOM_CHARTS_QUERY_PARAMS = Object.entries(
-  CUSTOM_CHART_SCREENS
-).reduce((acc, [key, { screen, custom }]) => {
-  acc[key] = `${CHART_URL}&screen=${screen}&custom=${custom}`;
-  return acc;
-}, {});
+exports.CUSTOM_CHARTS_URL = Object.entries(CUSTOM_CHART_SCREENS).reduce(
+  (acc, [key, { screen, custom }]) => {
+    acc[key] = `${CHART_URL}&screen=${screen}&custom=${custom}`;
+    return acc;
+  },
+  {}
+);
