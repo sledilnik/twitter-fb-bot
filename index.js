@@ -25,14 +25,14 @@ exports.handler = async (event, _, callback) => {
   const post = queryStringParameters?.post;
   const social = queryStringParameters?.social;
 
-  if (!post) throw new Error('You must provide post! ["lab" || "hos"]');
+  if (!post)
+    throw new Error('You must provide post! ["lab" || "hos" || "epi"]');
   if (!social) throw new Error('You must provide social! ["tw"]');
 
   if (!SUPPORTED_POST.includes(post.toLowerCase()))
-    throw new Error(`Post ${post} is not supported!`);
-
+    throw new Error(`Post ${post} is not supported! ["lab" || "hos" || "epi"]`);
   if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
-    throw new Error(`Social "${social}" is not supported!`);
+    throw new Error(`Social "${social}" is not supported! ["tw"]`);
 
   const { screens } = POST_SCREENS[post.toUpperCase()];
 
