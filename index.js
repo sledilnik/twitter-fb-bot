@@ -22,11 +22,7 @@ const SCREENS_PAYLOAD = {
 const SUPPORTED_SOCIAL = ["tw"];
 const SUPPORTED_POST = ["lab", "hos", "epi"];
 
-exports.handler = async (event, _, callback) => {
-  const { queryStringParameters } = event;
-  const post = queryStringParameters?.post;
-  const social = queryStringParameters?.social;
-
+const validate = ({ post, social }) => {
   if (!post)
     throw new Error('You must provide post! ["lab" || "hos" || "epi"]');
   if (!social) throw new Error('You must provide social! ["tw"]');
@@ -35,7 +31,14 @@ exports.handler = async (event, _, callback) => {
     throw new Error(`Post ${post} is not supported! ["lab" || "hos" || "epi"]`);
   if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
     throw new Error(`Social "${social}" is not supported! ["tw"]`);
+};
 
+exports.handler = async (event, _, callback) => {
+  const { queryStringParameters } = event;
+  const post = queryStringParameters?.post;
+  const social = queryStringParameters?.social;
+
+  validate({ post, social });
   const { screens } = POST_SCREENS[post.toUpperCase()];
 
   let result;
