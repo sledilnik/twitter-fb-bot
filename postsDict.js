@@ -3,18 +3,18 @@
 exports.POST_SCREENS = {
   LAB: {
     screens: [
-      "testsToday",
-      "testsTodayHAT",
-      "casesAvg7Days",
-      "casesActive100k",
+      "EmbedTestsToday",
+      "EmbedTestsTodayHAT",
+      "EmbedCasesAvg7Days",
+      "EmbedCasesActive100k",
     ],
   },
   HOS: {
     screens: [
-      "vaccinationSummary",
-      "hospitalizedCurrent",
-      "icuCurrent",
-      "deceasedToDate",
+      "EmbedVaccinationSummary",
+      "EmbedHospitalizedCurrent",
+      "EmbedIcuCurrent",
+      "EmbedDeceasedToDate",
     ],
   },
   EPI: {
