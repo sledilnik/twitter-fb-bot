@@ -3,6 +3,7 @@ const {
   MULTICARD_SCREENS,
   CHART_SCREENS,
   CUSTOM_CHART_SCREENS,
+  CARD_EMBED_SCREENS,
 } = require("./screensDict");
 
 const defaultQueryParams = {
@@ -36,3 +37,12 @@ exports.CUSTOM_CHARTS_QUERY_PARAMS = Object.entries(
   acc[key] = { ...cardDefault, screen, custom };
   return acc;
 }, {});
+
+exports.CARDS_EMBED_QUERY_PARAMS = Object.entries(CARD_EMBED_SCREENS).reduce(
+  (acc, [key, { screen, custom }]) => {
+    const cardDefault = { ...defaultQueryParams, type: "chart" };
+    acc[key] = { ...cardDefault, screen, custom };
+    return acc;
+  },
+  {}
+);

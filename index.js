@@ -7,6 +7,7 @@ const {
   MULTICARDS,
   CHARTS,
   CUSTOM_CHARTS,
+  CARDS_EMBED,
 } = require("./screenshotParams");
 const invokeAwsLambda = require("./invokeAwsLambda");
 
@@ -17,6 +18,7 @@ const SCREENS_PAYLOAD = {
   ...MULTICARDS,
   ...CHARTS,
   ...CUSTOM_CHARTS,
+  ...CARDS_EMBED,
 };
 
 const SUPPORTED_SOCIAL = ["tw"];

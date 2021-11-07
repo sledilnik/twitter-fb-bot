@@ -3,6 +3,7 @@ const {
   MULTICARDS_QUERY_PARAMS,
   CHARTS_QUERY_PARAMS,
   CUSTOM_CHARTS_QUERY_PARAMS,
+  CARDS_EMBED_QUERY_PARAMS,
 } = require("./queryParams");
 
 function getScrenshotParams(params) {
@@ -46,6 +47,21 @@ const CUSTOM_CHARTS = Object.entries(CUSTOM_CHARTS_QUERY_PARAMS).reduce(
   {}
 );
 
+const CARDS_EMBED = Object.entries(CARDS_EMBED_QUERY_PARAMS).reduce(
+  (acc, [screen, params]) => {
+    acc[screen] = getScrenshotParams(params);
+    return acc;
+  },
+  {}
+);
+
 const DEFAULT = MULTICARDS.ALL;
 
-module.exports = { CARDS, MULTICARDS, CHARTS, CUSTOM_CHARTS, DEFAULT };
+module.exports = {
+  CARDS,
+  MULTICARDS,
+  CHARTS,
+  CUSTOM_CHARTS,
+  CARDS_EMBED,
+  DEFAULT,
+};
