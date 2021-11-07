@@ -75,3 +75,16 @@ exports.CUSTOM_CHART_SCREENS = {
     custom: "vaccinesUsed",
   },
 };
+
+exports.CARD_EMBED_SCREENS = {
+  EmbedTestsToday: { screen: "testsToday" },
+  EmbedTestsTodayHAT: { screen: "testsTodayHAT" },
+  EmbedHospitalizedCurrent: { screen: "hospitalizedCurrent" },
+  EmbedIcuCurrent: { screen: "icuCurrent" },
+  EmbedDeceasedToDate: { screen: "deceasedToDate" },
+  EmbedCasesAvg7Days: { screen: "casesAvg7Days" },
+  EmbedVaccinationSummary: { screen: "vaccinationSummary" },
+  EmbedCasesActive100k: { screen: "casesActive100k" },
+  EmbedConfirmedCases: { screen: "confirmedCases" },
+  EmbedCasesActive: { screen: "casesActive" },
+};
