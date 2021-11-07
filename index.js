@@ -71,20 +71,20 @@ exports.handler = async (event, _, callback) => {
       const vacs = splittedText.slice(5, 8).concat(emojis).join("\n");
       const byAge = splittedText.slice(8, 9).concat(emojis).join("\n");
       const hos = splittedText.slice(9, 12).concat(emojis).join("\n");
-      const _fifth = splittedText.slice(12, splittedText.length - 1);
+      const byHosByMun = splittedText.slice(12, splittedText.length - 1);
 
       const HOSPITALS = "Stanje po bolnišnicah";
       const MUNICIPALITIES = "Po krajih";
 
-      const byHosIndex = _fifth.findIndex((element) =>
+      const byHosIndex = byHosByMun.findIndex((element) =>
         element.includes(HOSPITALS)
       );
-      const byMunIndex = _fifth.findIndex((element) =>
+      const byMunIndex = byHosByMun.findIndex((element) =>
         element.includes(MUNICIPALITIES)
       );
 
-      const byHos = _fifth.slice(byHosIndex, 4).concat(emojis).join("\n");
-      const byMun = _fifth
+      const byHos = byHosByMun.slice(byHosIndex, 4).concat(emojis).join("\n");
+      const byMun = byHosByMun
         .slice(byMunIndex, byMunIndex + 4)
         .concat(emojis)
         .join("\n");
