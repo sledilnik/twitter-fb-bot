@@ -10,6 +10,8 @@ const {
 } = require("./screenshotParams");
 const invokeAwsLambda = require("./invokeAwsLambda");
 
+const THREAD_STATUS = require("./threadStatus.js");
+
 const SCREENS_PAYLOAD = {
   ...CARDS,
   ...MULTICARDS,
@@ -65,36 +67,12 @@ exports.handler = async (event, _, callback) => {
     }
 
     if (goForThread) {
-      const splittedText = tweetText.split("\n");
-      const emojis = splittedText.slice(-1);
-      const lab = splittedText.slice(0, 5).concat(emojis).join("\n");
-      const vacs = splittedText.slice(5, 8).concat(emojis).join("\n");
-      const byAge = splittedText.slice(8, 9).concat(emojis).join("\n");
-      const hos = splittedText.slice(9, 12).concat(emojis).join("\n");
-      const byHosByMun = splittedText.slice(12, splittedText.length - 1);
-
-      const HOSPITALS = "Stanje po bolnišnicah";
-      const MUNICIPALITIES = "Po krajih";
-
-      const byHosIndex = byHosByMun.findIndex((element) =>
-        element.includes(HOSPITALS)
-      );
-      const byMunIndex = byHosByMun.findIndex((element) =>
-        element.includes(MUNICIPALITIES)
-      );
-
-      const byHos = byHosByMun.slice(byHosIndex, 4).concat(emojis).join("\n");
-      const byMun = byHosByMun
-        .slice(byMunIndex, byMunIndex + 4)
-        .concat(emojis)
-        .join("\n");
-
       const payloads = screens.map((threadScreens) =>
         threadScreens.map((screen) => SCREENS_PAYLOAD[screen])
       );
-      const thread = [lab, vacs, byAge, hos, byHos, byMun].map((item) => ({
-        status: item,
-      }));
+
+      const makeThreadStatus = THREAD_STATUS[post.toUpperCase()];
+      const thread = makeThreadStatus(tweetText);
 
       result = await tweetThread(payloads, thread);
     }
