@@ -2,29 +2,33 @@
 
 exports.POST_SCREENS = {
   LAB: {
-    screens: [
-      "EmbedTestsToday",
-      "EmbedTestsTodayHAT",
-      "EmbedCasesAvg7Days",
-      "EmbedCasesActive100k",
-    ],
+    screens: ["LAB"],
   },
   HOS: {
-    screens: [
-      "EmbedVaccinationSummary",
-      "EmbedHospitalizedCurrent",
-      "EmbedIcuCurrent",
-      "EmbedDeceasedToDate",
-    ],
+    screens: ["HOS"],
   },
   EPI: {
     screens: [
-      ["DailyComparison"],
-      ["Tests", "Vaccination"],
-      ["AgeGroups"],
-      ["Patients"],
-      ["IcuPatients"],
-      ["Regions"],
+      ["EmbedIcuCurrent"],
+      ["EmbedDeceasedToDate", "MapWeeklyGrowthDay"],
+      ["DailyComparisonCasesActive", "icuCurrent", "Map"],
+      [],
+      [],
+      [],
+    ],
+  },
+  EPI_HOS: {
+    screens: [["Patients", "IcuPatients"], ["HOS"]],
+  },
+  EPI_MUN: {
+    screens: [
+      [
+        "Municipalities",
+        "MapAbsolute1Day",
+        "MapDistribution1Day",
+        "MapWeeklyGrowthDay",
+      ],
+      ["LAB"],
     ],
   },
 };
