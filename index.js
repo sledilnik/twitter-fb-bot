@@ -22,15 +22,20 @@ const SCREENS_PAYLOAD = {
 };
 
 const SUPPORTED_SOCIAL = ["tw"];
-const SUPPORTED_POST = ["lab", "hos", "epi"];
+const SUPPORTED_POST = ["lab", "hos", "epi", "epi_hos", "epi_mun"];
+const SUPPORTED_GO_FOR_THREAD = ["epi", "epi_hos", "epi_mun"];
 
 const validate = ({ post, social }) => {
   if (!post)
-    throw new Error('You must provide post! ["lab" || "hos" || "epi"]');
+    throw new Error(
+      'You must provide post! ["lab" || "hos" || "epi" || "epi_hos" || "epi_mun"]'
+    );
   if (!social) throw new Error('You must provide social! ["tw"]');
 
   if (!SUPPORTED_POST.includes(post.toLowerCase()))
-    throw new Error(`Post ${post} is not supported! ["lab" || "hos" || "epi"]`);
+    throw new Error(
+      `Post ${post} is not supported! ["lab" || "hos" || "epi", "epi_hos" || "epi_mun"]`
+    );
   if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
     throw new Error(`Social "${social}" is not supported! ["tw"]`);
 };
@@ -45,12 +50,13 @@ exports.handler = async (event, _, callback) => {
 
   let result;
   try {
+    const postFotGetText = post.split("_")[0];
     const postParam = {
       FunctionName: "GrabSledilnikSocialPost",
       InvocationType: "RequestResponse",
       LogType: "Tail",
       Payload: JSON.stringify({
-        queryStringParameters: { post, social },
+        queryStringParameters: { post: postFotGetText, social },
       }),
     };
 
@@ -61,7 +67,7 @@ exports.handler = async (event, _, callback) => {
     const tweetText = postResponse?.payload ?? "";
     if (!tweetText) console.warn("Tweet without text");
 
-    const goForThread = post === "epi";
+    const goForThread = SUPPORTED_GO_FOR_THREAD.includes(post);
 
     if (!goForThread) {
       const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(tweetText);
