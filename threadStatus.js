@@ -64,6 +64,44 @@ const makeEpiThreadStatus = (epiText) => {
   }));
 };
 
+const makeEpiHosThreadStatus = (epiText) => {
+  const splittedText = epiText.split("\n");
+  const emojis = splittedText.slice(-1);
+  const hos = splittedText.slice(9, 12).concat(emojis).join("\n");
+
+  const { byHos } = getByHosAndByMunText({
+    textArray: splittedText,
+    appenddixRow: emojis,
+    startIndex: 12,
+    byHosRowLength: 4,
+    byMunRowLength: 4,
+  });
+
+  return [hos, byHos].map((item) => ({
+    status: item,
+  }));
+};
+
+const makeEpiMunThreadStatus = (epiText) => {
+  const splittedText = epiText.split("\n");
+  const emojis = splittedText.slice(-1);
+  const lab = splittedText.slice(0, 5).concat(emojis).join("\n");
+
+  const { byMun } = getByHosAndByMunText({
+    textArray: splittedText,
+    appenddixRow: emojis,
+    startIndex: 12,
+    byHosRowLength: 4,
+    byMunRowLength: 4,
+  });
+
+  return [lab, byMun].map((item) => ({
+    status: item,
+  }));
+};
+
 module.exports = {
   EPI: makeEpiThreadStatus,
+  EPI_HOS: makeEpiHosThreadStatus,
+  EPI_MUN: makeEpiMunThreadStatus,
 };
