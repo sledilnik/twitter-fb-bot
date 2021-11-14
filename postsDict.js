@@ -9,12 +9,25 @@ exports.POST_SCREENS = {
   },
   EPI: {
     screens: [
-      ["EmbedIcuCurrent"],
-      ["EmbedDeceasedToDate", "MapWeeklyGrowthDay"],
-      ["DailyComparisonCasesActive", "icuCurrent", "Map"],
-      [],
-      [],
-      [],
+      [
+        "ALL",
+        "DailyComparisonCasesConfirmed",
+        "DailyComparisonCasesActive",
+        "DailyComparisonPerformedPCR",
+      ],
+      ["DailyComparisonVaccinesUsed", "Regions100kVaccinated7DayAvg"],
+      [
+        "AgeGroupsTimelineNewCasesFourMonths",
+        "AgeGroupsTimelineNewCasesRelativeFourMonths",
+        "SchoolsActiveAbsolutePupilsFourMonths",
+      ],
+      ["Patients", "IcuPatients"],
+      [
+        "Municipalities",
+        "MapAbsolute1Day",
+        "MapDistribution1Day",
+        "MapWeeklyGrowthDay",
+      ],
     ],
   },
   EPI_HOS: {

@@ -67,7 +67,7 @@ exports.handler = async (event, _, callback) => {
     const tweetText = postResponse?.payload ?? "";
     if (!tweetText) console.warn("Tweet without text");
 
-    const goForThread = SUPPORTED_GO_FOR_THREAD.includes(post);
+    const goForThread = SUPPORTED_GO_FOR_THREAD.includes(post.toLowerCase());
 
     if (!goForThread) {
       const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(tweetText);

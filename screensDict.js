@@ -74,6 +74,30 @@ exports.CUSTOM_CHART_SCREENS = {
     screen: "DailyComparison",
     custom: "vaccinesUsed",
   },
+  AgeGroupsTimelineNewCasesFourMonths: {
+    screen: "AgeGroupsTimeline",
+    custom: "newCasesFourMonths",
+  },
+  AgeGroupsTimelineNewCasesRelativeFourMonths: {
+    screen: "AgeGroupsTimeline",
+    custom: "newCasesRelativeFourMonths",
+  },
+  SchoolsActiveAbsolutePupilsFourMonths: {
+    screen: "Schools",
+    custom: "activeAbsolutePupilsFourMonths",
+  },
+  MetricsComparisonCasesConfirmed7DaysAvgFourMonths: {
+    screen: "MetricsComparison",
+    custom: "casesConfirmed7DaysAvgFourMonths",
+  },
+  Regions100kCasesConfirmed7DayAvg: {
+    screen: "Regions100k",
+    custom: "casesConfirmed7DayAvg",
+  },
+  Regions100kVaccinated7DayAvg: {
+    screen: "Regions100k",
+    custom: "vaccinated7DayAvg",
+  },
 };
 
 exports.CARD_EMBED_SCREENS = {
