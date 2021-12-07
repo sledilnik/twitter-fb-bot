@@ -41,6 +41,4 @@ I haven't tried but with temp account you don't have to worry about deleting twe
 
 Run `node test.js`.
 
-In `test.js` change
-
-Check `postsDict.js` for possible tweets. In `screens`
+Check `postsDict.js` for possible tweets.
