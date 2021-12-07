@@ -19,6 +19,7 @@ function run(post, social) {
   (async () => await handler(event, null, callback))();
 }
 
-run("EPI", "tw");
+// Possible: LAB, HOS, EPI, EPI_HOS, EPI_MUN
+run("LAB", "tw");
 
 // twitter img preview at width 650: width: 465, height: 243.453
