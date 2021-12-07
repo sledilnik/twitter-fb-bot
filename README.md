@@ -23,7 +23,7 @@ Facebook is not supported at the moment.
 
 Just push to master.
 
-In case you want to push to different AWS Lambda. Create AWS Lambda on AWS.
+In case you want to push to different AWS Lambda. Create AWS Lambda on [AWS](https://aws.amazon.com/console/).
 Change the name in `.github/workflow/main.yml` to match your AWS Lambda name.
 Create two env variables in secrets in your github repo:
 
