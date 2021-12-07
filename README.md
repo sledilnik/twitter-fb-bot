@@ -2,7 +2,7 @@
 
 It's made for AWS Lambda.
 
-Set .env file with appropriate secrets. See `.env.example`.
+Create `.env` file with appropriate secrets. See `.env.example`.
 
 You can post 5 tweets:
 
