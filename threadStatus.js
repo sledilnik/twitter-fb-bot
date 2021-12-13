@@ -96,7 +96,7 @@ const makeEpiThreadStatus = (epiText) => {
   const tThree = byAge.join("\n");
   const tFour = hos
     .concat(byHosReplaced)
-    .concat(["Več: https://covid-19.sledilnik.org/sl/stats#patients-char"])
+    .concat(["Več: https://covid-19.sledilnik.org/sl/stats#patients-chart"])
     .join("\n")
     .replace("Hospitalizirani", "🏥🛌");
   const tFive = byMun;
