@@ -50,13 +50,13 @@ exports.handler = async (event, _, callback) => {
 
   let result;
   try {
-    const postFotGetText = post.split("_")[0];
+    const postQueryParam = post.split("_")[0];
     const postParam = {
       FunctionName: "GrabSledilnikSocialPost",
       InvocationType: "RequestResponse",
       LogType: "Tail",
       Payload: JSON.stringify({
-        queryStringParameters: { post: postFotGetText, social },
+        queryStringParameters: { post: postQueryParam, social },
       }),
     };
 
