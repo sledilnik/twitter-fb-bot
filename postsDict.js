@@ -21,7 +21,7 @@ exports.POST_SCREENS = {
         "AgeGroupsTimelineNewCasesRelativeFourMonths",
         "SchoolsActiveAbsolutePupilsFourMonths",
       ],
-      ["Patients", "IcuPatients"],
+      ["Patients", "IcuPatients", "PatientsByHospital"],
       [
         "Municipalities",
         "MapAbsolute1Day",

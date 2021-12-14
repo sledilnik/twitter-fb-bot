@@ -98,6 +98,10 @@ exports.CUSTOM_CHART_SCREENS = {
     screen: "Regions100k",
     custom: "vaccinated7DayAvg",
   },
+  PatientsByHospital: {
+    screen: "Patients",
+    custom: "byHospital",
+  },
 };
 
 exports.CARD_EMBED_SCREENS = {
