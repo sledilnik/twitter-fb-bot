@@ -32,6 +32,9 @@ Create two env variables in secrets in your github repo:
 
 ## Development
 
+AWS Lambda requires node version 14.x. If you want to use different version of node, just delete `.nvmrc`, `.npmrc` and
+in `package.json` `"node": "14.x"` in `engines` field
+
 Run `yarn` to install.
 
 ⚠️ Setting `NODE_ENV=development` in `.env` will post tweet and delete it. If not you have to delete tweet manually.
