@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "epi": "node epi.js",
+    "hat": "node hat.js",
+    "lab": "node lab.js",
     "test": "node test.js",
     "test-thread": "node test-thread.js"
   },
@@ -24,7 +27,6 @@
     "twitter-text": "^3.1.0"
   },
   "engines": {
-    "node": "14.x",
     "npm": "Please use yarn",
     "yarn": "1.22.x"
   }

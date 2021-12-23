@@ -19,7 +19,16 @@ function run(post, social) {
   (async () => await handler(event, null, callback))();
 }
 
-// Possible: LAB, HOS, EPI, EPI_HOS, EPI_MUN
-run("LAB", "tw");
+exports.run = run;
 
 // twitter img preview at width 650: width: 465, height: 243.453
+
+if (require.main === module) {
+  console.log(
+    "this module was run directly from the command line as in node test.js"
+  );
+  // Possible: LAB, HOS, EPI, EPI_HOS, EPI_MUN
+  run("LAB", "tw");
+} else {
+  console.log(`require: ${module.id}`);
+}
