@@ -1,26 +1,26 @@
 const twitter = require("twitter-text");
 
-const HOSPITAL_TRANLASATE = {
-  "UKC Ljubljana": "UKC LJ",
-  "UKC Maribor": "UKC MB",
-  "SB Celje": "SB CE",
-  "SB Murska Sobota": "SB MS",
-  "SB Novo mesto": "SB NM",
-  "UK Golnik": "Golnik",
-  "SB Slovenj Gradec": "SB SG",
-  "SB Nova Gorica": "SB NG",
-  "SB Ptuj": "Ptuj",
-  "SB Izola": "Izola",
-  "SB Brežice": "Brežice",
-  "SB Jesenice": "Jesenice",
-  "Bolnišnica Sežana": "Sežana",
-  "Bolnišnica Topolščica": "Topolšica",
-  "SB Trbovlje": "Trbovlje",
-};
+// const HOSPITAL_TRANLASATE = {
+//   "UKC Ljubljana": "UKC LJ",
+//   "UKC Maribor": "UKC MB",
+//   "SB Celje": "SB CE",
+//   "SB Murska Sobota": "SB MS",
+//   "SB Novo mesto": "SB NM",
+//   "UK Golnik": "Golnik",
+//   "SB Slovenj Gradec": "SB SG",
+//   "SB Nova Gorica": "SB NG",
+//   "SB Ptuj": "Ptuj",
+//   "SB Izola": "Izola",
+//   "SB Brežice": "Brežice",
+//   "SB Jesenice": "Jesenice",
+//   "Bolnišnica Sežana": "Sežana",
+//   "Bolnišnica Topolščica": "Topolšica",
+//   "SB Trbovlje": "Trbovlje",
+// };
 
 const getByHosAndByMunText = ({
   textArray,
-  startIndex = 12,
+  startIndex = 14,
   byHosRowLength = 4,
   byMunRowLength = 4,
   appenddixRow = [],
@@ -71,37 +71,39 @@ const makeEpiThreadStatus = (epiText) => {
   const vacs = splittedText.slice(5, 7);
   const cum = splittedText.slice(7, 8);
   const byAge = splittedText.slice(8, 9);
-  const hos = splittedText.slice(9, 12);
+  const hos = splittedText.slice(9, 14);
 
-  const { byHos, byMun } = getByHosAndByMunText({
+  const { byMun } = getByHosAndByMunText({
     textArray: splittedText,
     appenddixRow: [],
-    startIndex: 12,
+    startIndex: 14,
     byHosRowLength: 3,
     byMunRowLength: 11,
   });
 
-  const byHosReplaced = byHos.split("\n").map((line) => {
-    let neki = line;
-    for (let key of Object.keys(HOSPITAL_TRANLASATE)) {
-      if (line.includes(key)) {
-        neki = neki.replace(key, HOSPITAL_TRANLASATE[key]);
-      }
-    }
-    return neki;
-  });
+  // const byHosReplaced = byHos.split("\n").map((line) => {
+  //   let neki = line;
+  //   for (const key of Object.keys(HOSPITAL_TRANLASATE)) {
+  //     if (line.includes(key)) {
+  //       neki = neki.replace(key, HOSPITAL_TRANLASATE[key]);
+  //     }
+  //   }
+  //   return neki;
+  // });
 
   const tOne = header.concat(lab).concat(cum).join("\n");
   const tTwo = vacs.join("\n");
   const tThree = byAge.join("\n");
   const tFour = hos
-    .concat(byHosReplaced)
+    // .concat(byHosReplaced)
     .concat(["Več: https://covid-19.sledilnik.org/sl/stats#patients-chart"])
     .join("\n")
     .replace("Hospitalizirani", "🏥🛌");
   const tFive = byMun;
 
-  const thread = [tOne, tTwo, tThree, tFour, tFive];
+  console.log({ hos, tFour });
+
+  const thread = [tFour, tOne, tTwo, tThree, tFive];
 
   const rangeCheckedThread = thread.map((text, index) => {
     const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(text);
