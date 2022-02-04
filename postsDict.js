@@ -9,6 +9,7 @@ exports.POST_SCREENS = {
   },
   EPI: {
     screens: [
+      ["Patients", "IcuPatients", "PatientsByHospital"],
       [
         "ALL",
         "DailyComparisonCasesConfirmed",
@@ -21,7 +22,6 @@ exports.POST_SCREENS = {
         "AgeGroupsTimelineNewCasesRelativeFourMonths",
         "SchoolsActiveAbsolutePupilsFourMonths",
       ],
-      ["Patients", "IcuPatients", "PatientsByHospital"],
       [
         "Municipalities",
         "MapAbsolute1Day",
