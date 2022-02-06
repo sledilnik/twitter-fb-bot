@@ -101,9 +101,7 @@ const makeEpiThreadStatus = (epiText) => {
     .replace("Hospitalizirani", "🏥🛌");
   const tFive = byMun;
 
-  console.log({ hos, tFour });
-
-  const thread = [tFour, tOne, tTwo, tThree, tFive];
+  const thread = [tOne, tTwo, tThree, tFour, tFive];
 
   const rangeCheckedThread = thread.map((text, index) => {
     const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(text);
