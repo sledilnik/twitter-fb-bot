@@ -22,19 +22,29 @@ const SCREENS_PAYLOAD = {
 };
 
 const SUPPORTED_SOCIAL = ["tw"];
-const SUPPORTED_POST = ["lab", "hos", "epi", "epi_hos", "epi_mun"];
-const SUPPORTED_GO_FOR_THREAD = ["epi", "epi_hos", "epi_mun"];
+const SUPPORTED_POST = [
+  "lab",
+  "hos",
+  "epi",
+  "epi_hos",
+  "epi_mun",
+  "lab_w",
+  "epi_w",
+];
+const SUPPORTED_GO_FOR_THREAD = ["epi", "epi_hos", "epi_mun", "epi_w"];
+
+const NO_SPLIT = ["LAB_W", "EPI_W"];
 
 const validate = ({ post, social }) => {
   if (!post)
     throw new Error(
-      'You must provide post! ["lab" || "hos" || "epi" || "epi_hos" || "epi_mun"]'
+      'You must provide post! ["lab" || "hos" || "epi" || "epi_hos" || "epi_mun" || "lab_w" || "epi_w]'
     );
   if (!social) throw new Error('You must provide social! ["tw"]');
 
   if (!SUPPORTED_POST.includes(post.toLowerCase()))
     throw new Error(
-      `Post ${post} is not supported! ["lab" || "hos" || "epi", "epi_hos" || "epi_mun"]`
+      `Post ${post} is not supported! ["lab" || "hos" || "epi", "epi_hos" || "epi_mun" || "lab_w" || epi_w]`
     );
   if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
     throw new Error(`Social "${social}" is not supported! ["tw"]`);
@@ -50,7 +60,7 @@ exports.handler = async (event, _, callback) => {
 
   let result;
   try {
-    const postQueryParam = post.split("_")[0];
+    const postQueryParam = NO_SPLIT.includes(post) ? post : post.split("_")[0];
     const postParam = {
       FunctionName: "GrabSledilnikSocialPost",
       InvocationType: "RequestResponse",

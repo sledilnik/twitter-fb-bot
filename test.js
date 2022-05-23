@@ -28,7 +28,7 @@ if (require.main === module) {
     "this module was run directly from the command line as in node test.js"
   );
   // Possible: LAB, HOS, EPI, EPI_HOS, EPI_MUN
-  run("LAB", "tw");
+  run("EPI_W", "tw");
 } else {
   console.log(`require: ${module.id}`);
 }

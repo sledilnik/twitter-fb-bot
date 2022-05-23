@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "epi": "node epi.js",
+    "epi_w": "node epi_w.js",
     "hos": "node hos.js",
     "lab": "node lab.js",
+    "lab_w": "node lab_w.js",
     "test": "node test.js",
     "test-thread": "node test-thread.js"
   },

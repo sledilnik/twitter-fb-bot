@@ -44,4 +44,27 @@ exports.POST_SCREENS = {
       ["LAB"],
     ],
   },
+  LAB_W: { screens: ["LAB"] },
+  EPI_W: {
+    screens: [
+      [
+        "ALL",
+        "DailyComparisonCasesConfirmed",
+        "DailyComparisonCasesActive",
+        "DailyComparisonPerformedPCR",
+      ],
+      ["DailyComparisonVaccinesUsed", "Regions100kVaccinated7DayAvg"],
+      [
+        "AgeGroupsTimelineNewCasesFourMonths",
+        "AgeGroupsTimelineNewCasesRelativeFourMonths",
+        "SchoolsActiveAbsolutePupilsFourMonths",
+      ],
+      [
+        "Municipalities",
+        "MapAbsolute1Day",
+        "MapDistribution1Day",
+        "MapWeeklyGrowthDay",
+      ],
+    ],
+  },
 };

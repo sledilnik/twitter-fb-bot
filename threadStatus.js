@@ -137,6 +137,64 @@ const makeEpiThreadStatus = (epiText) => {
   }));
 };
 
+const makeEpiWThreadStatus = (epiText) => {
+  const splittedText = epiText.split("\n");
+  // const emojis = splittedText.slice(-1);
+  const header = splittedText.slice(0, 1);
+  const lab = splittedText.slice(1, 5);
+  const vacs = splittedText.slice(5, 7);
+  const cum = splittedText.slice(7, 8);
+  const byAge = splittedText.slice(8, 9);
+
+  const { byMun } = getByHosAndByMunText({
+    textArray: splittedText,
+    appenddixRow: [],
+    startIndex: 9,
+    byHosRowLength: 0,
+    byMunRowLength: 11,
+  });
+
+  const tOne = header.concat(lab).concat(cum).join("\n");
+  const tTwo = vacs.join("\n");
+  const tThree = byAge.join("\n");
+  const tFive = byMun;
+
+  const thread = [tOne, tTwo, tThree, tFive];
+
+  const rangeCheckedThread = thread.map((text, index) => {
+    const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(text);
+    const isOk = validRangeEnd === displayRangeEnd;
+    if (isOk) {
+      console.log({ index, validRangeEnd, displayRangeEnd, isOk });
+      console.log(text);
+      console.log();
+      return text;
+    }
+
+    const removeLastLine = (currentText) => {
+      console.log("Removing last line from thread with index: ", index);
+      const splittedText = currentText.split("\n");
+      const newText = splittedText.slice(0, -1).join("\n");
+      const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(newText);
+      const isOk = validRangeEnd === displayRangeEnd;
+      if (isOk) {
+        console.log({ validRangeEnd, displayRangeEnd, isOk });
+        console.log(text);
+        console.log();
+        return newText;
+      }
+      return removeLastLine(newText);
+    };
+
+    console.log({ index, validRangeEnd, displayRangeEnd, isOk });
+    return removeLastLine(text);
+  });
+
+  return rangeCheckedThread.map((item) => ({
+    status: item,
+  }));
+};
+
 const makeEpiHosThreadStatus = (epiText) => {
   const splittedText = epiText.split("\n");
   const emojis = splittedText.slice(-1);
@@ -175,6 +233,7 @@ const makeEpiMunThreadStatus = (epiText) => {
 
 module.exports = {
   EPI: makeEpiThreadStatus,
+  EPI_W: makeEpiWThreadStatus,
   EPI_HOS: makeEpiHosThreadStatus,
   EPI_MUN: makeEpiMunThreadStatus,
 };
