@@ -1,22 +1,34 @@
 const twitter = require("twitter-text");
 
-// const HOSPITAL_TRANLASATE = {
-//   "UKC Ljubljana": "UKC LJ",
-//   "UKC Maribor": "UKC MB",
-//   "SB Celje": "SB CE",
-//   "SB Murska Sobota": "SB MS",
-//   "SB Novo mesto": "SB NM",
-//   "UK Golnik": "Golnik",
-//   "SB Slovenj Gradec": "SB SG",
-//   "SB Nova Gorica": "SB NG",
-//   "SB Ptuj": "Ptuj",
-//   "SB Izola": "Izola",
-//   "SB Brežice": "Brežice",
-//   "SB Jesenice": "Jesenice",
-//   "Bolnišnica Sežana": "Sežana",
-//   "Bolnišnica Topolščica": "Topolšica",
-//   "SB Trbovlje": "Trbovlje",
-// };
+const getRangeCheckedThread = (thread) =>
+  thread.map((text, index) => {
+    const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(text);
+    const isOk = validRangeEnd === displayRangeEnd;
+    if (isOk) {
+      console.log({ index, validRangeEnd, displayRangeEnd, isOk });
+      console.log(text);
+      console.log();
+      return text;
+    }
+
+    const removeLastLine = (currentText) => {
+      console.log("Removing last line from thread with index: ", index);
+      const splittedText = currentText.split("\n");
+      const newText = splittedText.slice(0, -1).join("\n");
+      const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(newText);
+      const isOk = validRangeEnd === displayRangeEnd;
+      if (isOk) {
+        console.log({ validRangeEnd, displayRangeEnd, isOk });
+        console.log(text);
+        console.log();
+        return newText;
+      }
+      return removeLastLine(newText);
+    };
+
+    console.log({ index, validRangeEnd, displayRangeEnd, isOk });
+    return removeLastLine(text);
+  });
 
 const getByHosAndByMunText = ({
   textArray,
@@ -65,11 +77,10 @@ const getByHosAndByMunText = ({
 
 const makeEpiThreadStatus = (epiText) => {
   const splittedText = epiText.split("\n");
-  // const emojis = splittedText.slice(-1);
   const header = splittedText.slice(0, 1);
   const lab = splittedText.slice(1, 5);
   const vacs = splittedText.slice(5, 7);
-  const cum = splittedText.slice(7, 8);
+  const totalCases = splittedText.slice(7, 8);
   const byAge = splittedText.slice(8, 9);
   const hos = splittedText.slice(9, 14);
 
@@ -81,56 +92,17 @@ const makeEpiThreadStatus = (epiText) => {
     byMunRowLength: 11,
   });
 
-  // const byHosReplaced = byHos.split("\n").map((line) => {
-  //   let neki = line;
-  //   for (const key of Object.keys(HOSPITAL_TRANLASATE)) {
-  //     if (line.includes(key)) {
-  //       neki = neki.replace(key, HOSPITAL_TRANLASATE[key]);
-  //     }
-  //   }
-  //   return neki;
-  // });
-
-  const tOne = header.concat(lab).concat(cum).join("\n");
+  const tOne = header.concat(lab).concat(totalCases).join("\n");
   const tTwo = vacs.join("\n");
   const tThree = byAge.join("\n");
   const tFour = hos
-    // .concat(byHosReplaced)
     .concat(["Več: https://covid-19.sledilnik.org/sl/stats#patients-chart"])
     .join("\n")
     .replace("Hospitalizirani", "🏥🛌");
   const tFive = byMun;
 
   const thread = [tOne, tTwo, tThree, tFour, tFive];
-
-  const rangeCheckedThread = thread.map((text, index) => {
-    const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(text);
-    const isOk = validRangeEnd === displayRangeEnd;
-    if (isOk) {
-      console.log({ index, validRangeEnd, displayRangeEnd, isOk });
-      console.log(text);
-      console.log();
-      return text;
-    }
-
-    const removeLastLine = (currentText) => {
-      console.log("Removing last line from thread with index: ", index);
-      const splittedText = currentText.split("\n");
-      const newText = splittedText.slice(0, -1).join("\n");
-      const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(newText);
-      const isOk = validRangeEnd === displayRangeEnd;
-      if (isOk) {
-        console.log({ validRangeEnd, displayRangeEnd, isOk });
-        console.log(text);
-        console.log();
-        return newText;
-      }
-      return removeLastLine(newText);
-    };
-
-    console.log({ index, validRangeEnd, displayRangeEnd, isOk });
-    return removeLastLine(text);
-  });
+  const rangeCheckedThread = getRangeCheckedThread(thread);
 
   return rangeCheckedThread.map((item) => ({
     status: item,
@@ -139,11 +111,10 @@ const makeEpiThreadStatus = (epiText) => {
 
 const makeEpiWThreadStatus = (epiText) => {
   const splittedText = epiText.split("\n");
-  // const emojis = splittedText.slice(-1);
   const header = splittedText.slice(0, 1);
   const lab = splittedText.slice(1, 5);
   const vacs = splittedText.slice(5, 7);
-  const cum = splittedText.slice(7, 8);
+  const totalCases = splittedText.slice(7, 8);
   const byAge = splittedText.slice(8, 9);
 
   const { byMun } = getByHosAndByMunText({
@@ -154,41 +125,13 @@ const makeEpiWThreadStatus = (epiText) => {
     byMunRowLength: 11,
   });
 
-  const tOne = header.concat(lab).concat(cum).join("\n");
+  const tOne = header.concat(lab).concat(totalCases).join("\n");
   const tTwo = vacs.join("\n");
   const tThree = byAge.join("\n");
-  const tFive = byMun;
+  const tFour = byMun;
 
-  const thread = [tOne, tTwo, tThree, tFive];
-
-  const rangeCheckedThread = thread.map((text, index) => {
-    const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(text);
-    const isOk = validRangeEnd === displayRangeEnd;
-    if (isOk) {
-      console.log({ index, validRangeEnd, displayRangeEnd, isOk });
-      console.log(text);
-      console.log();
-      return text;
-    }
-
-    const removeLastLine = (currentText) => {
-      console.log("Removing last line from thread with index: ", index);
-      const splittedText = currentText.split("\n");
-      const newText = splittedText.slice(0, -1).join("\n");
-      const { validRangeEnd, displayRangeEnd } = twitter.parseTweet(newText);
-      const isOk = validRangeEnd === displayRangeEnd;
-      if (isOk) {
-        console.log({ validRangeEnd, displayRangeEnd, isOk });
-        console.log(text);
-        console.log();
-        return newText;
-      }
-      return removeLastLine(newText);
-    };
-
-    console.log({ index, validRangeEnd, displayRangeEnd, isOk });
-    return removeLastLine(text);
-  });
+  const thread = [tOne, tTwo, tThree, tFour];
+  const rangeCheckedThread = getRangeCheckedThread(thread);
 
   return rangeCheckedThread.map((item) => ({
     status: item,
