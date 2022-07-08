@@ -79,21 +79,21 @@ const makeEpiThreadStatus = (epiText) => {
   const splittedText = epiText.split("\n");
   const header = splittedText.slice(0, 1);
   const lab = splittedText.slice(1, 5);
-  const vacs = splittedText.slice(5, 7);
-  const totalCases = splittedText.slice(7, 8);
-  const byAge = splittedText.slice(8, 9);
-  const hos = splittedText.slice(9, 14);
+  // const vacs = splittedText.slice(5, 7);
+  const totalCases = splittedText.slice(5, 6);
+  const byAge = splittedText.slice(6, 7);
+  const hos = splittedText.slice(7, 12);
 
   const { byMun } = getByHosAndByMunText({
     textArray: splittedText,
     appenddixRow: [],
-    startIndex: 14,
+    startIndex: 12,
     byHosRowLength: 3,
     byMunRowLength: 11,
   });
 
   const tOne = header.concat(lab).concat(totalCases).join("\n");
-  const tTwo = vacs.join("\n");
+  // const tTwo = vacs.join("\n");
   const tThree = byAge.join("\n");
   const tFour = hos
     .concat(["Več: https://covid-19.sledilnik.org/sl/stats#patients-chart"])
@@ -101,7 +101,7 @@ const makeEpiThreadStatus = (epiText) => {
     .replace("Hospitalizirani", "🏥🛌");
   const tFive = byMun;
 
-  const thread = [tOne, tTwo, tThree, tFour, tFive];
+  const thread = [tOne, tThree, tFour, tFive];
   const rangeCheckedThread = getRangeCheckedThread(thread);
 
   return rangeCheckedThread.map((item) => ({
@@ -113,24 +113,24 @@ const makeEpiWThreadStatus = (epiText) => {
   const splittedText = epiText.split("\n");
   const header = splittedText.slice(0, 1);
   const lab = splittedText.slice(1, 5);
-  const vacs = splittedText.slice(5, 7);
-  const totalCases = splittedText.slice(7, 8);
-  const byAge = splittedText.slice(8, 9);
+  // const vacs = splittedText.slice(5, 7);
+  const totalCases = splittedText.slice(5, 6);
+  const byAge = splittedText.slice(6, 7);
 
   const { byMun } = getByHosAndByMunText({
     textArray: splittedText,
     appenddixRow: [],
-    startIndex: 9,
+    startIndex: 7,
     byHosRowLength: 0,
     byMunRowLength: 11,
   });
 
   const tOne = header.concat(lab).concat(totalCases).join("\n");
-  const tTwo = vacs.join("\n");
+  // const tTwo = vacs.join("\n");
   const tThree = byAge.join("\n");
   const tFour = byMun;
 
-  const thread = [tOne, tTwo, tThree, tFour];
+  const thread = [tOne, tThree, tFour];
   const rangeCheckedThread = getRangeCheckedThread(thread);
 
   return rangeCheckedThread.map((item) => ({

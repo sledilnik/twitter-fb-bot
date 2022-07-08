@@ -15,7 +15,7 @@ exports.POST_SCREENS = {
         "DailyComparisonCasesActive",
         "DailyComparisonPerformedPCR",
       ],
-      ["DailyComparisonVaccinesUsed", "Regions100kVaccinated7DayAvg"],
+      // ["DailyComparisonVaccinesUsed", "Regions100kVaccinated7DayAvg"],
       [
         "AgeGroupsTimelineNewCasesFourMonths",
         "AgeGroupsTimelineNewCasesRelativeFourMonths",
@@ -53,7 +53,7 @@ exports.POST_SCREENS = {
         "DailyComparisonCasesActive",
         "DailyComparisonPerformedPCR",
       ],
-      ["DailyComparisonVaccinesUsed", "Regions100kVaccinated7DayAvg"],
+      // ["DailyComparisonVaccinesUsed", "Regions100kVaccinated7DayAvg"],
       [
         "AgeGroupsTimelineNewCasesFourMonths",
         "AgeGroupsTimelineNewCasesRelativeFourMonths",
