@@ -51,9 +51,12 @@ const validate = ({ post, social }) => {
 };
 
 exports.handler = async (event, _, callback) => {
-  const { queryStringParameters } = event;
-  const post = queryStringParameters?.post;
-  const social = queryStringParameters?.social;
+  if (!event.queryStringParameters) {
+    return callback(undefined, "No-target");
+  }
+
+  const post = event.queryStringParameters?.post;
+  const social = event.queryStringParameters?.social;
 
   validate({ post, social });
   const { screens } = POST_SCREENS[post.toUpperCase()];
