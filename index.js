@@ -36,18 +36,20 @@ const SUPPORTED_GO_FOR_THREAD = ["epi", "epi_hos", "epi_mun", "epi_w"];
 const NO_SPLIT = ["LAB_W", "EPI_W"];
 
 const validate = ({ post, social }) => {
+  if (!social) throw new Error('You must provide social! ["tw"]');
+
+  if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
+    throw new Error(`Social "${social}" is not supported! ["tw"]`);
+
   if (!post)
     throw new Error(
       'You must provide post! ["lab" || "hos" || "epi" || "epi_hos" || "epi_mun" || "lab_w" || "epi_w]'
     );
-  if (!social) throw new Error('You must provide social! ["tw"]');
 
   if (!SUPPORTED_POST.includes(post.toLowerCase()))
     throw new Error(
       `Post ${post} is not supported! ["lab" || "hos" || "epi", "epi_hos" || "epi_mun" || "lab_w" || epi_w]`
     );
-  if (!SUPPORTED_SOCIAL.includes(social.toLowerCase()))
-    throw new Error(`Social "${social}" is not supported! ["tw"]`);
 };
 
 exports.handler = async (event, _, callback) => {
@@ -57,8 +59,11 @@ exports.handler = async (event, _, callback) => {
 
   const post = event.queryStringParameters?.post;
   const social = event.queryStringParameters?.social;
-
-  validate({ post, social });
+  try {
+    validate({ post, social });
+  } catch (error) {
+    callback(undefined, error?.message ?? "Something went wrong!");
+  }
   const { screens } = POST_SCREENS[post.toUpperCase()];
 
   let result;
