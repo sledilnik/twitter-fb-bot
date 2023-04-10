@@ -23,6 +23,7 @@ jobs:
         with:
           args: zip -qq -r ./bundle.zip ./
       - name: default deploy
+        if: github.ref == 'refs/heads/master'
         uses: appleboy/lambda-action@master
         with:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
