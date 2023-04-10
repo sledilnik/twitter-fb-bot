@@ -23,7 +23,8 @@ exports.tweetSingle = async (awsImageParams = {}, tweetText = "") => {
       type: "png",
     });
 
-    const tweet = await v1Client.tweet(tweetText, {
+    // hack to remove " #/#" from tweet text"
+    const tweet = await v1Client.tweet(tweetText.replace(/ \d\/\d/gm, ""), {
       media_ids: mediaId,
     });
 
@@ -44,7 +45,8 @@ exports.tweetMultiple = async (awsImagesParams = [], tweetText = "") => {
   try {
     const media_ids = await uploadImages(awsImagesParams);
 
-    const tweet = await v1Client.tweet(tweetText, {
+    // hack to remove " #/#" from tweet text"
+    const tweet = await v1Client.tweet(tweetText.replace(/ \d\/\d/gm, ""), {
       media_ids,
     });
 
