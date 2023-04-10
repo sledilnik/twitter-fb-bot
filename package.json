@@ -24,8 +24,8 @@
     "prettier": "^2.8.7"
   },
   "dependencies": {
-    "aws-sdk": "^2.1020.0",
-    "twitter-api-v2": "^1.6.5",
+    "aws-sdk": "^2.1353.0",
+    "twitter-api-v2": "^1.14.2",
     "twitter-text": "^3.1.0"
   },
   "engines": {
