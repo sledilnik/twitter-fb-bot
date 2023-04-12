@@ -26,6 +26,12 @@ jobs:
         env:
           CI: true
 
+      - name: Status
+        run: | 
+          ls -la
+          git status
+          git diff
+
       - name: Publish LAB Tweet
         env:
           TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
