@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: yarn
 
       - name: yarn install
         run: |
@@ -31,4 +32,5 @@ jobs:
           TWITTER_API_KEY_SECRET: ${{ secrets.TWITTER_API_KEY_SECRET }}
           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          NODE_ENV: development
         run: node LAB
