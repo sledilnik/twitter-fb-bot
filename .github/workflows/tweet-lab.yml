@@ -22,7 +22,7 @@ jobs:
 
       - name: yarn install
         run: |
-          yarn --prod
+          yarn install --prod
         env:
           CI: true
 
