@@ -1,6 +1,7 @@
 const { v1Client } = require("./twitterClient");
 
 const invokeAwsLambda = require("./invokeAwsLambda");
+const { EUploadMimeType } = require("twitter-api-v2");
 
 const DELETE_DELAY = 1000;
 
@@ -93,7 +94,7 @@ const uploadImages = async (awsImagesParams = []) => {
   const media_ids = await Promise.all([
     ...imagesBase64.map((image) =>
       v1Client.uploadMedia(Buffer.from(image, "base64"), {
-        type: "png",
+        mimeType: EUploadMimeType.Png,
       })
     ),
   ]);

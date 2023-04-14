@@ -2,6 +2,7 @@ const { v1Client } = require("./twitterClient");
 
 const invokeAwsLambda = require("./invokeAwsLambda");
 const { getResult, uploadImages } = require("./tweetsUtils");
+const { EUploadMimeType } = require("twitter-api-v2");
 
 // tweet with image
 exports.tweetSingle = async (awsImageParams = {}, tweetText = "") => {
@@ -20,7 +21,7 @@ exports.tweetSingle = async (awsImageParams = {}, tweetText = "") => {
   try {
     const body = image?.payload?.body;
     const mediaId = await v1Client.uploadMedia(Buffer.from(body, "base64"), {
-      type: "png",
+      mimeType: EUploadMimeType.Png,
     });
 
     // hack to remove " #/#" from tweet text"
