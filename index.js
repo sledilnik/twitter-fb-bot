@@ -85,6 +85,11 @@ exports.handler = async (event, _, callback) => {
     const tweetText = postResponse?.payload ?? "";
     if (!tweetText) console.warn("Tweet without text");
 
+    if (tweetText.includes("❌")) {
+      console.log("tweet:\n", tweetText);
+      throw new Error("Tweet text contains ❌");
+    }
+
     const goForThread = SUPPORTED_GO_FOR_THREAD.includes(post.toLowerCase());
 
     if (!goForThread) {
